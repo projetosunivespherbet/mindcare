@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindCare — página não encontrada</title>
+    <meta name="robots" content="noindex" />
+    <!--
+      O Cloudflare Pages serve este arquivo para qualquer rota que não exista em disco. Sem ele, abrir
+      (ou recarregar) /pacientes, /documentos, /verificar/CODIGO etc. devolve a página de erro do Pages,
+      não o app. Ele leva para a raiz, onde o React Router decide a rota pelo caminho original
+      (guardado em ?pelo=) e redireciona para /pacientes ou /entrar.
+    -->
+    <script>
+      (function () {
+        try {
+          var alvo = new URLSearchParams(location.search).get("pelo");
+          // Só caminhos internos: evita virar redirect aberto.
+          if (alvo && alvo.charAt(0) === "/" && alvo.indexOf("//") !== 0) {
+            sessionStorage.setItem("mc-return", alvo);
+          }
+        } catch (e) {
+          /* ignora */
+        }
+        location.replace("/");
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <p>Esta página não foi encontrada. <a href="/">Voltar para o início</a>.</p>
+    </noscript>
+  </body>
+</html>
