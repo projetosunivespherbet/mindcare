@@ -1,0 +1,10 @@
+# Normaliza fim de linha: migrations .sql precisam de LF para o Postgres e os testes não differem no CI.
+* text=auto eol=lf
+*.sql text eol=lf
+*.sh text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.mjs text eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary

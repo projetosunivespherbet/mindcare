@@ -25,7 +25,8 @@ Teste em navegador real (Chrome headless, inclui CSP e PDF): veja `e2e-browser/R
 
 ## Publicação
 Veja `DEPLOY.md` (Neon + Cloudflare Workers + Pages, com roteiro de teste no navegador). Os endereços que precisam
-de ser trocados quando o domínio mudar estão em `ENDERECOS.md`.
+de ser trocados quando o domínio mudar estão em `ENDERECOS.md`. A ordem de ligação das contas (GitHub → Cloudflare →
+Neon) e o que depende de login seu está em `CONECTAR-CONTAS.md`.
 
 ## Backend (fase 2)
 
