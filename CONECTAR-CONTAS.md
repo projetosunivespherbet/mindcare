@@ -10,7 +10,7 @@ Estado desta máquina em 25/10/2026:
 | Item | Situação |
 |---|---|
 | Git | ✅ instalado (`C:\Program Files\Git\cmd\git.exe`) |
-| Repositório local | ✅ `main`, commit `6acf13d`, 203 arquivos, sem segredos |
+| Repositório local | ✅ `main`, 2 commits (`6acf13d` + docs), 203 arquivos, sem segredos |
 | GitHub CLI (`gh`) | ⚠️ instalação bloqueada (outro instalador em andamento) — os passos abaixo usam o site |
 | Cloudflare (wrangler) | ❌ não autenticado |
 | Neon | ❌ sem projeto |
@@ -67,8 +67,19 @@ CREATE ROLE app_user LOGIN PASSWORD 'TROQUE-ESTA-SENHA' IN ROLE app_runtime;
 
 ## 3. Cloudflare — API (Worker) e front (Pages)
 
-O projeto usa **um Worker** (API) e **um Pages** (front). O Pages construindo do GitHub já publica
-o front a cada `git push`; o Worker é publicado pelo terminal.
+O projeto usa **dois serviços da Cloudflare, e os dois são obrigatórios** — não é escolha entre um e outro:
+
+| | Pages (front) | Workers (API) |
+|---|---|---|
+| O que roda | React/Vite compilado (`dist`) | Hono, `api/src/index.ts` |
+| Publica como | conectado ao GitHub, a cada `push` | `npx wrangler deploy` |
+| URL | `https://SEU-APP.pages.dev` | `https://mindcare-api.SEU-SUBDOMINIO.workers.dev` |
+| Guarda segredo | não | sim (`DATABASE_URL`, `JWT_SECRET`, `SETUP_TOKEN`) |
+
+O front é estático; a API precisa de servidor (Postgres, RLS, JWT). Com só o Pages, o site abre e
+**nenhuma** chamada funciona. Com só o Worker, a API responde mas não há tela — e o CORS recusa tudo,
+porque não existe front em `ALLOWED_ORIGIN`. Ordem: **Neon → Worker → Pages → voltar ao Worker**
+(itens 2, 3.1, 3.2 e 3.3).
 
 ### 3.1 Worker (API)
 
@@ -120,9 +131,9 @@ Todas as linhas precisam sair com ✓.
 - **Não configure `TURNSTILE_SECRET`.** O captcha está incompleto no front (falta o widget e a CSP
   liberar `challenges.cloudflare.com`). Se ligar o segredo agora, login e aceite de convite passam a
   devolver 400. Detalhes em `ENDERECOS.md`, item 8.
-- **O build local não roda nesta máquina** com o `npm run build` atual (o binário do SWC não carrega
-  neste ambiente). No Pages (Node 22 / Linux) funciona. Para validar localmente, instale o Node 22
-  oficial por `winget install OpenJS.NodeJS.LTS` e reabra o terminal.
+- **O build local não roda nesta máquina** com o `npm run build` atual: os pacotes ficaram
+  incompletos em `node_modules`. O Node aqui é o 22.16 oficial. Para validar localmente, rode
+  `npm ci` de novo (e `npm ci` em `api/`); no Pages (Node 22 / Linux) o build funciona.
 
 ## 5. O que eu faço assim que você me passar
 
