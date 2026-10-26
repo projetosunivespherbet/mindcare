@@ -1,5 +1,6 @@
 # Regras de arquitetura
 
-- O produto é um software de gestão para o psicólogo e sua clínica. A área do paciente e a mensageria foram descontinuadas; não reintroduza telas, rotas ou assinaturas de mensagens.
-- Papéis e vínculos devem ser definidos no servidor (RLS, triggers ou funções), nunca só no front.
-- Dados clínicos são sensíveis (LGPD): não exclua registros clínicos fisicamente e não envie conteúdo clínico a serviços externos.
+- O produto é um sistema de gestão para psicólogos e clínicas.
+- O frontend e a API devem ser tratados como camadas separadas; permissões e regras de negócio ficam no servidor.
+- Dados clínicos são sensíveis; não excluir registros de forma física e não enviar conteúdo clínico a serviços externos.
+- Áreas abandonadas, como mensagens/paciente em ramos antigos, não devem ser reintroduzidas sem revisão explícita.
